@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Upload Media for ISL Translation{% endblock %}
+
+{% block content %}
+<h2>Upload Video/Audio for ISL Translation</h2>
+<form action="{% url 'process_media' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <label for="mediaFile">Select Video or Audio:</label>
+    <input type="file" name="video" id="mediaFile">
+    <input type="file" name="audio" id="audioFile">
+    <button type="submit">Upload</button>
+</form>
+{% endblock %}

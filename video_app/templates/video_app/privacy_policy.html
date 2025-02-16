@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block title %}Privacy Policy{% endblock %}
+
+{% block content %}
+<div class="mx-auto" style="max-width: 800px;">
+    <div class="text-center mb-5">
+        <h2 class="mb-4 text-primary fw-bold display-5">Privacy Policy</h2>
+        <p class="text-muted fs-5">
+            Your privacy is important to us. This policy explains how we collect, use, and protect your information.
+        </p>
+    </div>
+
+    <div class="mb-4">
+        <h4 class="fw-semibold mb-2"><i class="bi bi-database-fill-lock"></i> Data Collection</h4>
+        <p class="fs-6 text-secondary">
+            We collect necessary information when you interact with our services. This includes:
+        </p>
+        <ul class="list-group list-group-flush mb-3">
+            <li class="list-group-item">🔹 Data from videos you upload, including extracted audio for predictions.</li>
+            <li class="list-group-item">🔹 Recorded audio that you provide for processing.</li>
+            <li class="list-group-item">🔹 Information submitted through the contact form, such as your name, email, and message.</li>
+        </ul>
+        <p class="fs-6 text-danger">
+            <strong>Note:</strong> All data is used strictly to improve predictions and enhance your experience.
+        </p>
+    </div>
+
+    <div class="mb-4">
+        <h4 class="fw-semibold mb-2"><i class="bi bi-cloud-check-fill"></i> Data Storage</h4>
+        <p class="fs-6 text-secondary">
+            All extracted and recorded audio files are securely stored using industry-standard encryption protocols. We retain these files solely for model training and prediction improvements.
+        </p>
+    </div>
+
+    <div class="mb-4">
+        <h4 class="fw-semibold mb-2"><i class="bi bi-shield-lock-fill"></i> Data Sharing</h4>
+        <p class="fs-6 text-secondary">
+            We value your trust and prioritize your privacy. <br/>
+            <strong class="text-success">We do not share your personal information with third parties.</strong>  
+            All contact form submissions are handled securely and used only to respond to your queries.
+        </p>
+    </div>
+
+    <div class="mb-4">
+        <h4 class="fw-semibold mb-2"><i class="bi bi-person-check-fill"></i> User Consent</h4>
+        <p class="fs-6 text-secondary">
+            By using our services, you consent to the collection and use of your information as outlined in this policy.
+        </p>
+    </div>
+
+    <div class="text-center mt-5">
+        <p class="text-muted">
+            &copy; 2025 ISL Converter. Your data is safe with us.  
+            <br/>Have concerns? <a href="{% url 'contact_us' %}" class="text-decoration-none">Contact us</a>.
+        </p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}ISL Converter{% endblock %}
+
+{% block content %}
+<header class="py-4 custom-header text-center shadow-sm">
+    <h1 class="display-6">{% block header %}Welcome to the ISL Converter{% endblock %}</h1>
+</header>
+<div class="container py-4">
+    <div class="card shadow-lg mb-5 bg-body text-body">
+        <div class="card-body">
+            <h5 class="card-title mb-3">Upload Media or Enter Text</h5>
+            <form id="convertForm" action="{% url 'process_media' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="mb-3 position-relative">
+                    <label for="video" class="form-label">Upload Video</label>
+                    <input type="file" class="form-control" name="video" id="video">
+                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 mt-2 me-2 d-none" id="removeVideoBtn">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
+                </div>
+                <div class="mb-3 position-relative">
+                    <label class="form-label">Record Audio</label>
+                    <button type="button" class="btn btn-secondary w-100" id="recordAudioBtn">
+                        🎤 Start Recording
+                    </button>
+                    <input type="file" class="form-control d-none" name="audio" id="audio">
+                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 mt-2 me-2 d-none" id="removeAudioBtn">
+                        <i class="bi bi-x-circle"></i>
+                    </button>
+                </div>
+
+                <div class="mb-3">
+                    <label for="text" class="form-label">Enter Text</label>
+                    <input type="text" class="form-control" name="text" id="text" placeholder="Enter text">
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100" id="convertBtn">
+                    <i class="bi bi-translate"></i> Convert
+                </button>
+            </form>
+
+            <div id="loader" class="text-center mt-4 d-none">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Processing...</span>
+                </div>
+                <p class="mt-2">Processing... Please wait.</p>
+            </div>
+        </div>
+    </div>
+
+    {% if transcribed_text %}
+    <div class="card shadow-lg">
+        <div class="card-body">
+            <h5 class="card-title mb-4">Conversion Results</h5>
+            <p class="mb-2"><strong>Original Text:</strong> {{ transcribed_text }}</p>
+            <p class="mb-4"><strong>ISL Text:</strong> {{ isl_text }}</p>
+
+            <h6 class="mb-3">Uploaded Video & ISL Translation</h6>
+            <div class="d-flex flex-wrap gap-4 justify-content-center">
+                {% if uploaded_video %}
+                <div class="text-center">
+                    <h6 class="mb-2">Uploaded Video</h6>
+                    <video class="border rounded" width="480" height="360" controls>
+                        <source src="{{ uploaded_video }}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+                {% endif %}
+
+                <div class="text-center">
+                    <h6 id="videoTitle" class="mb-2">ISL Video</h6>
+                    <video id="islVideo" class="border rounded" width="480" height="360"></video>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    document.getElementById('convertForm').addEventListener('submit', function () {
+        document.getElementById('convertBtn').disabled = true;
+        document.getElementById('loader').classList.remove('d-none');
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const videos = JSON.parse('{{ video_paths|safe }}');
+        let currentVideo = 0;
+        const videoElement = document.getElementById("islVideo");
+        const videoTitle = document.getElementById("videoTitle");
+
+        function playNextVideo() {
+            if (currentVideo < videos.length) {
+                const videoPath = videos[currentVideo];
+                videoElement.src = videoPath;
+                videoTitle.innerText = ` ${videoPath.split('/').pop().split('.')[0]}`;
+                videoElement.load();
+                videoElement.play();
+                currentVideo++;
+                videoElement.onended = playNextVideo;
+            }
+        }
+
+        if (videos.length > 0 && videoElement) {
+            playNextVideo();
+        }
+    });
+</script>
+{% endblock %}
